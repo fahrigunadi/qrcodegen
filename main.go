@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os"
 	"path/filepath"
@@ -9,6 +10,7 @@ import (
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/template/html/v2"
 	"github.com/joho/godotenv"
+	"github.com/skip2/go-qrcode"
 )
 
 func main() {
@@ -31,6 +33,43 @@ func main() {
 	})
 
 	app.Static("/", "./public")
+	app.Get("/", func(c *fiber.Ctx) error {
+		return c.Render("index", fiber.Map{})
+	})
+	app.Post("/actions/qrcode", func(c *fiber.Ctx) error {
+		payload := struct {
+			Text string `json:"text"`
+		}{}
+
+		if err := c.BodyParser(&payload); err != nil {
+			return c.Render("result", fiber.Map{
+				"TextErr": "Text invalid",
+			})
+		}
+
+		q, err := qrcode.New(payload.Text, qrcode.Medium)
+		if err != nil {
+			return c.Render("result", fiber.Map{
+				"TextErr": "Text invalid",
+			})
+		}
+
+		filename := fmt.Sprintf("%d.png", time.Now().UnixNano())
+		dir := filepath.Join("public", "result")
+		filepath := filepath.Join(dir, filename)
+
+		err = q.WriteFile(256, filepath)
+		if err != nil {
+			return c.Render("result", fiber.Map{
+				"TextErr": "Failed to conver text",
+			})
+		}
+
+		return c.Render("result", fiber.Map{
+			"Text":   payload.Text,
+			"Result": filename,
+		})
+	})
 
 	app.Listen(":" + os.Getenv("PORT"))
 }

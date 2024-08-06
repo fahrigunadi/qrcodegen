@@ -1,0 +1,28 @@
+<div id="form">
+    <form hx-post="/actions/qrcode" hx-target="#form" hx-swap="outerHTML">
+        <div class="mb-3">
+            <label for="text" class="form-label">Text</label>
+            <textarea id="text" name="text" class="form-control {{ if .TextErr }} is-invalid {{end}}" id="text" rows="8">{{ .Text }}</textarea>
+            {{ if .TextErr }}
+            <div class="invalid-feedback">
+                {{ .TextErr }}
+            </div>
+            {{ end }}
+        </div>
+        <button type="submit" class="btn btn-primary">Generate QR Code</button>
+    </form>
+
+    {{ if .Result }}
+        <div class="col-12 mt-4">
+            <div class="col-12 col-md-6 w-100">
+                <div class="d-flex justify-content-center">
+                    <img class="border mx-auto" src="/result/{{ .Result }}" alt="QR">
+                </div>
+                <div class="text-center mt-1">
+                    <a target="_blank" href="/result/{{ .Result }}">{{ .Result }}</a>
+                    <a download href="/result/{{ .Result }}" class="btn btn-sm btn-secondary">Download</a>
+                </div>
+            </div>
+        </div>
+    {{ end }}
+</div>
