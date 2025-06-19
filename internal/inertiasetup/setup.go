@@ -67,6 +67,7 @@ func Setup() *inertia.Inertia {
 	}
 
 	i.ShareTemplateFunc("vite", vite(manifestPath, "/build/"))
+	i.ShareTemplateFunc("viteCss", viteCss(manifestPath, "/build/"))
 
 	return i
 }
@@ -97,5 +98,30 @@ func vite(manifestPath, buildDir string) func(path string) (string, error) {
 			return path.Join("/", buildDir, val.File), nil
 		}
 		return "", fmt.Errorf("asset %q not found", p)
+	}
+}
+
+func viteCss(manifestPath, buildDir string) func(path string) ([]string, error) {
+	f, err := os.Open(manifestPath)
+	if err != nil {
+		log.Fatalf("cannot open vite manifest: %s", err)
+	}
+	defer f.Close()
+
+	viteAssets := make(map[string]*struct {
+		File string   `json:"file"`
+		CSS  []string `json:"css"`
+	})
+	json.NewDecoder(f).Decode(&viteAssets)
+
+	return func(p string) ([]string, error) {
+		if val, ok := viteAssets[p]; ok {
+			cssUrls := []string{}
+			for _, css := range val.CSS {
+				cssUrls = append(cssUrls, path.Join("/", buildDir, css))
+			}
+			return cssUrls, nil
+		}
+		return nil, fmt.Errorf("css for asset %q not found", p)
 	}
 }
