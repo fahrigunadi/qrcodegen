@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"net/http"
 
 	"github.com/fahrigunadi/qrcodegen/handlers"
@@ -10,6 +12,16 @@ import (
 )
 
 func main() {
+	port := flag.String("port", "3000", "Port to run the server on")
+	p := flag.String("p", "3000", "Port to run the server on (shorthand)")
+
+	flag.Parse()
+
+	selectedPort := *port
+	if *p != "3000" && *p != *port {
+		selectedPort = *p
+	}
+
 	i := inertiasetup.Setup()
 
 	r := httprouter.New()
@@ -24,5 +36,7 @@ func main() {
 	r.GET("/url", utils.Wrap(i.Middleware(urlHandler.Index())))
 	r.POST("/generate-qr", utils.Wrap(i.Middleware(homeHandler.Generate())))
 
-	http.ListenAndServe(":3000", r)
+	addr := fmt.Sprintf(":%s", selectedPort)
+	fmt.Println("Server running at http://localhost" + addr)
+	http.ListenAndServe(addr, r)
 }
