@@ -3,6 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
+	"log"
 	"net/http"
 
 	"github.com/fahrigunadi/qrcodegen/handlers"
@@ -38,5 +39,5 @@ func main() {
 
 	addr := fmt.Sprintf(":%s", selectedPort)
 	fmt.Println("Server running at http://localhost" + addr)
-	http.ListenAndServe(addr, r)
+	log.Fatal(http.ListenAndServe(addr, r))
 }
