@@ -41,6 +41,9 @@ func Setup() *inertia.Inertia {
 			}
 			return url + entry, nil
 		})
+		i.ShareTemplateFunc("viteCss", func(entry string) ([]string, error) {
+			return []string{}, nil
+		})
 		return i
 	}
 
