@@ -2,11 +2,11 @@
   <div class="border-b border-gray-200 dark:border-gray-700 mt-20">
     <ul class="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500 dark:text-gray-400">
       <li class="me-2">
-        <a href="#" v-bind:class="itemClass(page.url === '/')">
+        <Link href="/" v-bind:class="itemClass(page.url === '/')">
           <Bars3BottomLeftIcon class="size-6" />
           &nbsp;
           Raw Data
-        </a>
+        </Link>
       </li>
       <li class="me-2">
         <Link href="/url" v-bind:class="itemClass(page.url.startsWith('/url'))">

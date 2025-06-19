@@ -13,7 +13,13 @@
   
       <div>
         <p>Preview</p>
-        <img class="w-[200px] border" v-bind:src="base64Result" alt="Preview">
+        <img v-if="base64Result" class="w-[200px] border" v-bind:src="base64Result" alt="Preview">
+        <div v-else class="w-[200px] h-[200px] flex items-center justify-center border">
+          <span>Preview not available</span>
+        </div>
+        <a v-bind:href="base64Result" download="qr.png" v-bind:disabled="!base64Result" className="mt-6">
+            <Button className="text-gray-900 mt-3 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2 w-full" v-bind:disabled="!base64Result">Download</Button>
+        </a>
       </div>
     </div>
   </Main>
@@ -25,7 +31,7 @@ import { ref, watch } from 'vue'
 import { useDebounce } from '@vueuse/core'
 import Main from '../../Components/Layouts/Main.vue'
 
-const base64Result = ref('https://fahrigunadi.dev/images/fahri.webp')
+const base64Result = ref('')
 const content = ref('')
 
 const debouncedQuery = useDebounce(content, 500)
@@ -34,7 +40,7 @@ watch(debouncedQuery, async (val) => {
   if (val) {
     onSubmit()
   } else {
-    base64Result.value = 'https://fahrigunadi.dev/images/fahri.webp'
+    base64Result.value = ''
   }
 })
 
