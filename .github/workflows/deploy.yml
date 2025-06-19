@@ -20,4 +20,4 @@ jobs:
           git reset --hard origin/main
           npm install && npm run build
           go build
-          /usr/bin/supervisorctl restart qrcodegen.fahrigunadi.dev
+          sudo /usr/bin/supervisorctl restart qrcodegen.fahrigunadi.dev
