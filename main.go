@@ -1,7 +1,6 @@
 package main
 
 import (
-	"log"
 	"net/http"
 
 	"github.com/fahrigunadi/qrcodegen/handlers"
@@ -16,12 +15,14 @@ func main() {
 	r := httprouter.New()
 
 	homeHandler := handlers.NewHomeHandler(i)
+	urlHandler := handlers.NewUrlHandler(i)
 
 	r.ServeFiles("/build/*filepath", http.Dir("./public/build"))
 	r.ServeFiles("/result/*filepath", http.Dir("./public/result"))
 
 	r.GET("/", utils.Wrap(i.Middleware(homeHandler.Index())))
+	r.GET("/url", utils.Wrap(i.Middleware(urlHandler.Index())))
 	r.POST("/generate-qr", utils.Wrap(i.Middleware(homeHandler.Generate())))
 
-	log.Fatal(http.ListenAndServe(":3001", r))
+	http.ListenAndServe(":3000", r)
 }

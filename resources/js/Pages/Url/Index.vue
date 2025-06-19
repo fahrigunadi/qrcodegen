@@ -2,7 +2,7 @@
   <Main>
     <div class="flex justify-between gap-4">
       <form v-on:submit.prevent="onSubmit" class="mt-5 flex-1">
-        <label for="content" class="block mb-2 text-sm font-medium text-gray-900">Your content</label>
+        <label for="content" class="block mb-2 text-sm font-medium text-gray-900">URL</label>
         <textarea v-model="content" id="content" rows="4"
           class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
           placeholder="Write your thoughts here..."></textarea>

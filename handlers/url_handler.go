@@ -12,17 +12,17 @@ import (
 	"github.com/yeqown/go-qrcode/writer/standard"
 )
 
-type HomeHandler struct {
+type UrlHandler struct {
 	Inertia *inertia.Inertia
 }
 
-func NewHomeHandler(i *inertia.Inertia) *HomeHandler {
-	return &HomeHandler{Inertia: i}
+func NewUrlHandler(i *inertia.Inertia) *UrlHandler {
+	return &UrlHandler{Inertia: i}
 }
 
-func (h *HomeHandler) Index() http.Handler {
+func (h *UrlHandler) Index() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		err := h.Inertia.Render(w, r, "Home/Index")
+		err := h.Inertia.Render(w, r, "Url/Index")
 
 		if err != nil {
 			utils.HandleServerErr(w, err)
@@ -30,7 +30,7 @@ func (h *HomeHandler) Index() http.Handler {
 	})
 }
 
-func (h *HomeHandler) Generate() http.Handler {
+func (h *UrlHandler) Generate() http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var data map[string]any
 		if err := json.NewDecoder(r.Body).Decode(&data); err != nil {
