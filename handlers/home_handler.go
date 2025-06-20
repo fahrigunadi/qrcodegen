@@ -51,8 +51,10 @@ func (h *HomeHandler) Generate() http.Handler {
 
 		var buf bytes.Buffer
 
-		options := []standard.ImageOption{
-			standard.WithCircleShape(),
+		options := []standard.ImageOption{}
+
+		if data["variant"] == "circle-shape" {
+			options = append(options, standard.WithCircleShape())
 		}
 
 		writer := standard.NewWithWriter(utils.NopWriteCloser{Writer: &buf}, options...)

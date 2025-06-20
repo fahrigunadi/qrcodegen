@@ -9,7 +9,7 @@
           class="text-gray-900 mt-3 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Generate</button>
       </form>
   
-      <QrPreview :base64Result="base64Result" />
+      <QrPreview :base64Result="base64Result" :variant="variant" @variant="variant = $event" />
     </div>
   </Main>
 </template>
@@ -23,6 +23,7 @@ import QrPreview from '../../Components/QrPreview.vue'
 
 const base64Result = ref('')
 const content = ref('')
+const variant = ref('')
 const inputEl = ref<HTMLInputElement | null>(null)
 
 onMounted(() => {
@@ -37,6 +38,10 @@ watch(debouncedQuery, async (val) => {
   } else {
     base64Result.value = ''
   }
+})
+
+watch(variant, async (val) => {
+  onSubmit()
 })
 
 const onSubmit = async () => {

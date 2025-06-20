@@ -13,6 +13,23 @@
       <span class="text-gray-500 text-sm">Preview not available</span>
     </div>
 
+    <div class="flex gap-2 my-2">
+      <button
+          @click="changeVariant('default')"
+          class="text-gray-900 bg-white border border-gray-300 font-medium rounded-lg overflow-hidden"
+          v-bind:class="variant !== 'circle-shape' ? 'ring-2 ring-offset-2 ring-blue-500' : ''"
+        >
+        <img width="50" height="50" src="https://s3.fahrigunadi.dev/qr-default.png" alt="qr default" />
+      </button>
+      <button
+          @click="changeVariant('circle-shape')"
+          class="text-gray-900 bg-white border border-gray-300 font-medium rounded-lg overflow-hidden"
+          v-bind:class="variant === 'circle-shape' ? 'ring-2 ring-offset-2 ring-blue-500' : ''"
+        >
+        <img width="50" height="50" src="https://s3.fahrigunadi.dev/qr-circle-shape.png" alt="qr circle shape" />
+      </button>
+    </div>
+
     <a
       :href="base64Result"
       download="qr.png"
@@ -32,5 +49,12 @@
 <script setup lang="ts">
 defineProps<{
   base64Result: string | undefined
+  variant: string | undefined
 }>()
+
+const emit = defineEmits(['variant'])
+
+function changeVariant(v: string) {
+  emit('variant', v)
+}
 </script>
