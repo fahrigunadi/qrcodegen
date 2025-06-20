@@ -1,6 +1,6 @@
 <template>
   <Main>
-    <div class="flex justify-between gap-4 pt-5">
+    <div class="md:flex md:justify-between gap-4 pt-5">
       <form v-on:submit.prevent="onSubmit" class="flex-1">
         <label for="content" class="block mb-2 text-sm font-medium text-gray-900">URL</label>
         <input ref="inputEl" type="url" v-model="content" id="content" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="https://example.com" required />
@@ -23,7 +23,7 @@ import QrPreview from '../../Components/QrPreview.vue'
 
 const base64Result = ref('')
 const content = ref('')
-const variant = ref('')
+const variant = ref('default')
 const inputEl = ref<HTMLInputElement | null>(null)
 
 onMounted(() => {
@@ -47,7 +47,8 @@ watch(variant, async (val) => {
 const onSubmit = async () => {
   try {
     const response = await axios.post('/generate-qr', {
-      content: content.value
+      content: content.value,
+      variant: variant.value,
     })
 
     base64Result.value = response.data.base64

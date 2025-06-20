@@ -1,6 +1,6 @@
 <template>
   <Main>
-    <div class="flex justify-between gap-4 pt-5">
+    <div class="md:flex md:justify-between gap-4 pt-5">
       <form v-on:submit.prevent="onSubmit" class="flex-1">
         <label for="content" class="block mb-2 text-sm font-medium text-gray-900">Your content</label>
         <textarea ref="inputEl" v-model="content" id="content" rows="4"

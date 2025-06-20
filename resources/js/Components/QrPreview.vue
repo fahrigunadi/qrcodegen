@@ -4,12 +4,12 @@
 
     <img
       v-if="base64Result"
-      class="w-[200px] border"
+      class="w-full md:w-[200px] border"
       :src="base64Result"
       alt="Preview"
     />
 
-    <div v-else class="w-[200px] h-[200px] flex items-center justify-center border">
+    <div v-else class="w-full h-[200px] md:w-[200px] flex items-center justify-center border">
       <span class="text-gray-500 text-sm">Preview not available</span>
     </div>
 
