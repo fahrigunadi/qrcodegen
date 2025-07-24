@@ -30,22 +30,15 @@
                 </Link>
             </li>
             <li class="me-2">
-                <a
-                    href="#"
-                    v-bind:class="itemClass(page.url.startsWith('/v-card'))"
-                >
-                    <IdentificationIcon class="size-6" />
-                    &nbsp; vCard
-                </a>
-            </li>
-            <li class="me-2">
-                <a
-                    href="#"
-                    v-bind:class="itemClass(page.url.startsWith('/email'))"
+                <Link
+                    href="/email"
+                    v-bind:class="
+                        itemClass(page.url.startsWith('/email'))
+                    "
                 >
                     <EnvelopeIcon class="size-6" />
                     &nbsp; Email
-                </a>
+                </Link>
             </li>
         </ul>
     </div>
@@ -55,7 +48,6 @@
 import {
     Bars3BottomLeftIcon,
     EnvelopeIcon,
-    IdentificationIcon,
     LinkIcon,
     PhoneIcon,
 } from "@heroicons/vue/24/outline";
