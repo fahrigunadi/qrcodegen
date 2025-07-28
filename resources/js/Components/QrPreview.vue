@@ -16,17 +16,17 @@
     <div class="flex gap-2 my-2">
       <button
           @click="changeVariant('default')"
-          class="text-gray-900 bg-white border border-gray-300 font-medium rounded-lg overflow-hidden"
+          class="text-gray-900 bg-white border border-gray-300 font-medium rounded-lg overflow-hidden p-2"
           v-bind:class="variant !== 'circle-shape' ? 'ring-2 ring-offset-2 ring-blue-500' : ''"
         >
-        <img width="50" height="50" src="https://s3.fahrigunadi.dev/qr-default.png" alt="qr default" />
+          <span class="block w-[30px] h-[30px] bg-gray-800"></span>
       </button>
       <button
           @click="changeVariant('circle-shape')"
-          class="text-gray-900 bg-white border border-gray-300 font-medium rounded-lg overflow-hidden"
+          class="text-gray-900 bg-white border border-gray-300 font-medium rounded-lg overflow-hidden p-2"
           v-bind:class="variant === 'circle-shape' ? 'ring-2 ring-offset-2 ring-blue-500' : ''"
         >
-        <img width="50" height="50" src="https://s3.fahrigunadi.dev/qr-circle-shape.png" alt="qr circle shape" />
+        <span class="block w-[30px] h-[30px] bg-gray-800 rounded-full"></span>
       </button>
     </div>
 
