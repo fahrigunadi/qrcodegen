@@ -14,10 +14,4 @@ jobs:
         username: ${{ secrets.SSH_USER }}
         password: ${{ secrets.SSH_PASS }}
         port: ${{ secrets.SSH_PORT }}
-        script: |
-          cd ~/apps/qrcodegen.fahrigunadi.dev
-          git fetch --all
-          git reset --hard origin/main
-          npm install && npm run build
-          go build
-          sudo /usr/bin/supervisorctl restart qrcodegen.fahrigunadi.dev
+        script: make deploy-qrcodegen-fahrigunadi
