@@ -31,6 +31,7 @@ func main() {
 	urlHandler := handlers.NewUrlHandler(i)
 	phoneNumberHandler := handlers.NewPhoneNumberHandler(i)
 	emailHandler := handlers.NewEmailHandler(i)
+	spreadsheetHandler := handlers.NewSpreadSheetHandler(i)
 
 	r.ServeFiles("/build/*filepath", http.Dir("./public/build"))
 	r.ServeFiles("/result/*filepath", http.Dir("./public/result"))
@@ -39,6 +40,7 @@ func main() {
 	r.GET("/url", utils.Wrap(i.Middleware(urlHandler.Index())))
 	r.GET("/phone-number", utils.Wrap(i.Middleware(phoneNumberHandler.Index())))
 	r.GET("/email", utils.Wrap(i.Middleware(emailHandler.Index())))
+	r.GET("/spreadsheet", utils.Wrap(i.Middleware(spreadsheetHandler.Index())))
 	r.POST("/generate-qr", utils.Wrap(i.Middleware(homeHandler.Generate())))
 
 	addr := fmt.Sprintf(":%s", selectedPort)

@@ -32,7 +32,7 @@
 
     <a
       :href="base64Result"
-      download="qr.png"
+      :download="filename || 'qrcode.png'"
       :disabled="!base64Result"
       class="mt-1 block"
     >
@@ -50,6 +50,7 @@
 defineProps<{
   base64Result: string | undefined
   variant: string | undefined
+  filename?: string | undefined
 }>()
 
 const emit = defineEmits(['variant'])
