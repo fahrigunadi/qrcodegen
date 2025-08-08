@@ -3,24 +3,21 @@
     <div class="md:flex md:justify-between gap-4 pt-5">
       <form v-on:submit.prevent="onSubmit" class="flex-1">
         <div>
-          <label for="email" class="block mb-2 text-sm font-medium text-gray-900">Email</label>
-          <input ref="inputEl" type="email" v-model="email" id="email" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="violet@example.com" required />
+          <InputLabel for="email">Email</InputLabel>
+          <Input type="email" v-model="email" id="email" placeholder="email@example.com" required autofocus />
         </div>
 
         <div class="mt-3">
-          <label for="subject" class="block mb-2 text-sm font-medium text-gray-900">Subject</label>
-          <input type="text" v-model="subject" id="subject" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5" placeholder="Some subject" />
+          <InputLabel for="subject">Subject</InputLabel>
+          <Input type="text" v-model="subject" id="subject" placeholder="Some subject" required />
         </div>
 
         <div class="mt-3">
-          <label for="message" class="block mb-2 text-sm font-medium text-gray-900">Body Message</label>
-          <textarea v-model="message" id="message" rows="4"
-            class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500"
-            placeholder="Write your thoughts here..."></textarea>
+          <InputLabel for="message">Body Message</InputLabel>
+          <Textarea v-model="message" id="message" rows="4" placeholder="Write your thoughts here..." />
         </div>
   
-        <button type="submit"
-          class="text-gray-900 mt-3 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 me-2 mb-2">Generate</button>
+        <Button type="submit" class="mt-3">Generate</Button>
       </form>
   
       <QrPreview :base64Result="base64Result" :variant="variant" @variant="variant = $event" />
@@ -29,22 +26,21 @@
 </template>
 
 <script setup lang="ts">
-import axios from 'axios'
-import { onMounted, ref, watch } from 'vue'
+import { ref, watch } from 'vue'
 import { useDebounce } from '@vueuse/core'
 import Main from '../../Components/Layouts/Main.vue'
 import QrPreview from '../../Components/QrPreview.vue'
+import InputLabel from '../../Components/InputLabel.vue'
+import Textarea from '../../Components/Textarea.vue'
+import Input from '../../Components/Input.vue'
+import Button from '../../Components/Button.vue'
+import { useQrGenerator } from '../../Composables/useQrGenerator'
 
-const base64Result = ref('')
+const { base64Result, generateQr } = useQrGenerator()
 const email = ref('')
 const subject = ref('')
 const message = ref('')
 const variant = ref('email')
-const inputEl = ref<HTMLInputElement | null>(null)
-
-onMounted(() => {
-  inputEl.value?.focus()
-})
 
 const debouncedQuery = useDebounce(email, 500)
 const debouncedSubject = useDebounce(subject, 500)
@@ -71,26 +67,6 @@ watch(variant, async (val) => {
 })
 
 const onSubmit = async () => {
-  if (!email.value) {
-    base64Result.value = ''
-
-    return
-  }
-
-  try {
-    const response = await axios.post('/generate-qr', {
-      content: `mailto:${email.value}?subject=${subject.value}&body=${message.value}`,
-      variant: variant.value,
-    })
-
-    base64Result.value = response.data.base64
-  } catch (error) {
-    console.log(error)
-  }
+  await generateQr(`mailto:${email.value}?subject=${subject.value}&body=${message.value}`, variant.value)
 }
-
-defineProps({
-  text: String,
-  qr: String,
-})
 </script>

@@ -13,37 +13,34 @@ import (
 )
 
 func main() {
-	port := flag.String("port", "3000", "Port to run the server on")
-	p := flag.String("p", "3000", "Port to run the server on (shorthand)")
-
-	flag.Parse()
-
-	selectedPort := *port
-	if *p != "3000" && *p != *port {
-		selectedPort = *p
-	}
+	port := getServerPort()
 
 	i := inertiasetup.Setup()
 
 	r := httprouter.New()
 
-	homeHandler := handlers.NewHomeHandler(i)
-	urlHandler := handlers.NewUrlHandler(i)
-	phoneNumberHandler := handlers.NewPhoneNumberHandler(i)
-	emailHandler := handlers.NewEmailHandler(i)
-	spreadsheetHandler := handlers.NewSpreadSheetHandler(i)
-
 	r.ServeFiles("/build/*filepath", http.Dir("./public/build"))
 	r.ServeFiles("/result/*filepath", http.Dir("./public/result"))
 
-	r.GET("/", utils.Wrap(i.Middleware(homeHandler.Index())))
-	r.GET("/url", utils.Wrap(i.Middleware(urlHandler.Index())))
-	r.GET("/phone-number", utils.Wrap(i.Middleware(phoneNumberHandler.Index())))
-	r.GET("/email", utils.Wrap(i.Middleware(emailHandler.Index())))
-	r.GET("/spreadsheet", utils.Wrap(i.Middleware(spreadsheetHandler.Index())))
-	r.POST("/generate-qr", utils.Wrap(i.Middleware(homeHandler.Generate())))
+	r.GET("/", utils.Wrap(i.Middleware(handlers.NewHomeHandler(i).Index())))
+	r.GET("/url", utils.Wrap(i.Middleware(handlers.NewUrlHandler(i).Index())))
+	r.GET("/phone-number", utils.Wrap(i.Middleware(handlers.NewPhoneNumberHandler(i).Index())))
+	r.GET("/email", utils.Wrap(i.Middleware(handlers.NewEmailHandler(i).Index())))
+	r.GET("/spreadsheet", utils.Wrap(i.Middleware(handlers.NewSpreadSheetHandler(i).Index())))
+	r.POST("/generate-qr", utils.Wrap(i.Middleware(handlers.NewGenerateHandler(i).Generate())))
 
-	addr := fmt.Sprintf(":%s", selectedPort)
+	addr := fmt.Sprintf(":%s", port)
 	fmt.Println("Server running at http://localhost" + addr)
 	log.Fatal(http.ListenAndServe(addr, r))
+}
+
+func getServerPort() string {
+	port := flag.String("port", "3000", "Port to run the server on")
+	short := flag.String("p", "3000", "Port to run the server on (shorthand)")
+	flag.Parse()
+
+	if *short != "3000" && *short != *port {
+		return *short
+	}
+	return *port
 }

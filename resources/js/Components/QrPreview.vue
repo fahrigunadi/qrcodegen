@@ -36,17 +36,14 @@
       :disabled="!base64Result"
       class="mt-1 block"
     >
-      <button
-        class="text-gray-900 bg-white border border-gray-300 focus:outline-none hover:bg-gray-100 focus:ring-4 focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 w-full"
-        :disabled="!base64Result"
-      >
-        Download
-      </button>
+      <Button :disabled="!base64Result" class="w-full">Download</Button>
     </a>
   </div>
 </template>
 
 <script setup lang="ts">
+import Button from './Button.vue';
+
 defineProps<{
   base64Result: string | undefined
   variant: string | undefined
